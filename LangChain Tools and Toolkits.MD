@@ -246,5 +246,5 @@ ToolMetaclass
 
 ---
 
-*Last Updated: November 2025*
+*Last Updated:
 *This reference includes tools from LangChain Community package and official integrations.*
