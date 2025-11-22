@@ -1,127 +1,527 @@
-# **DVC – Complete Command-Line Reference (Enterprise Ready)**
+# DVC Pipeline Setup Guide
 
-This document provides a comprehensive command-line reference for using **DVC (Data Version Control)** across production-grade machine learning workflows.  
-Commands are organized into five primary operational categories.
-
----
-
-## **1. Initialization & Repository Setup**
-
-| Purpose | Command |
-|--------|---------|
-| Initialize DVC | `dvc init` |
-| Initialize without Git | `dvc init --no-scm` |
-| Add remote storage | `dvc remote add -d myremote s3://bucket/path` |
-| Configure remote access | `dvc remote modify myremote access_key_id <KEY>` |
-| Check version | `dvc --version` |
-
----
-
-## **2. Data & Model Tracking**
-
-| Operation | Command |
-|-----------|---------|
-| Track a dataset | `dvc add data/raw.csv` |
-| Track a directory | `dvc add data/` |
-| Force-update a tracked directory | `dvc add --force data/` |
-| Track model artifacts | `dvc add models/model.pkl` |
-| Remove tracked file | `dvc remove data/raw.csv.dvc` |
-| Commit workspace changes | `dvc commit` |
+## Table of Contents
+- [Installation](#installation)
+- [Initialize DVC](#initialize-dvc)
+- [Configure Remote Storage](#configure-remote-storage)
+- [Track Data Files](#track-data-files)
+- [Create Pipeline Stages](#create-pipeline-stages)
+- [Run Pipeline](#run-pipeline)
+- [Visualize Pipeline](#visualize-pipeline)
+- [Track Experiments](#track-experiments)
+- [Commit Pipeline](#commit-pipeline)
+- [Pull Pipeline](#pull-pipeline)
+- [Pipeline Configuration Files](#pipeline-configuration-files)
+- [Useful Commands](#useful-commands)
 
 ---
 
-## **3. Pipelines, Stages & Automation**
+## Installation
+```bash
+# Install DVC
+pip install dvc
 
-| Purpose | Command |
-|---------|---------|
-| Create pipeline stage | `dvc stage add -n preprocess -d src/preprocess.py -d data/raw.csv -o data/clean.csv python src/preprocess.py` |
-| Run a pipeline | `dvc repro` |
-| Visualize pipeline DAG | `dvc dag` |
-| Freeze stage | `dvc freeze preprocess` |
-| Unfreeze stage | `dvc unfreeze preprocess` |
-| Check parameter differences | `dvc params diff` |
-
----
-
-## **4. Experiments (Experiment Management & MLOps)**
-
-| Purpose | Command |
-|---------|---------|
-| Run an experiment | `dvc exp run` |
-| Run with parameter override | `dvc exp run -S train.lr=0.001` |
-| List experiments | `dvc exp show` |
-| Compare experiments | `dvc exp diff` |
-| Apply experiment results | `dvc exp apply <exp_id>` |
-| Create Git branch from experiment | `dvc exp branch <exp_id> exp_branch` |
-| Push experiments to remote | `dvc exp push myremote` |
-| Pull experiments from remote | `dvc exp pull myremote` |
-| Remove experiments | `dvc exp remove <exp_id>` |
+# Install DVC with cloud storage support
+pip install dvc[s3]    # for AWS S3
+pip install dvc[gs]    # for Google Cloud Storage
+pip install dvc[azure] # for Azure Blob Storage
+```
 
 ---
 
-## **5. Remote Storage Operations**
-
-| Action | Command |
-|--------|---------|
-| Push data/models to remote | `dvc push` |
-| Pull data/models from remote | `dvc pull` |
-| Fetch data without modifying workspace | `dvc fetch` |
-| Set default remote | `dvc remote default myremote` |
-| Remove remote | `dvc remote remove myremote` |
-
----
-
-## **Additional High-Value Commands**
-
-### **Metrics & Parameters**
-
-| Command | Purpose |
-|---------|---------|
-| `dvc metrics show` | Display metrics |
-| `dvc metrics diff` | Compare metrics |
-| `dvc params diff` | Compare parameters |
-
----
-
-### **Cache, Lock & Diagnostics**
-
-| Command | Purpose |
-|---------|---------|
-| `dvc checkout` | Restore file state |
-| `dvc status` | Check for changes |
-| `dvc doctor` | Run diagnostics |
-| `dvc gc -w` | Clean unused cache |
-
----
-
-### **Import & Export**
-
-| Command | Purpose |
-|---------|---------|
-| `dvc import <url> <path>` | Import from remote repo |
-| `dvc import-url` | Import external dataset |
-| `dvc update` | Update imported data |
-| `dvc get <repo> data/file.csv` | Download without tracking |
-
----
-
-## **End-to-End Pipeline Workflow (Reference)**
-
-```sh
-git init
+## Initialize DVC
+```bash
+# Initialize DVC in your project
 dvc init
 
-dvc remote add -d storage s3://mlbucket/artifacts
+# Commit the DVC initialization files
+git add .dvc .dvcignore
+git commit -m "Initialize DVC"
+```
 
-dvc add data/raw.csv
-git add data/raw.csv.dvc .gitignore
-git commit -m "Added raw dataset"
+---
 
-dvc stage add -n preprocess \
-    -d src/preprocess.py \
-    -d data/raw.csv \
-    -o data/clean.csv \
-    python src/preprocess.py
+## Configure Remote Storage
 
-dvc repro
+### Local Remote Storage
+```bash
+dvc remote add -d myremote /path/to/remote/storage
+```
+
+### AWS S3
+```bash
+dvc remote add -d myremote s3://mybucket/path
+```
+
+### Google Cloud Storage
+```bash
+dvc remote add -d myremote gs://mybucket/path
+```
+
+### Google Drive
+```bash
+dvc remote add -d myremote gdrive://folder_id
+```
+
+### Azure Blob Storage
+```bash
+dvc remote add -d myremote azure://mycontainer/path
+```
+
+### Commit Remote Configuration
+```bash
+git add .dvc/config
+git commit -m "Configure DVC remote"
+```
+
+---
+
+## Track Data Files
+```bash
+# Track your data file with DVC
+dvc add data/raw_data.csv
+
+# This creates data/raw_data.csv.dvc file
+git add data/raw_data.csv.dvc data/.gitignore
+git commit -m "Track raw data with DVC"
+
+# Push data to remote storage
 dvc push
+```
+
+---
+
+## Create Pipeline Stages
+
+### Stage 1: Data Ingestion
+```bash
+dvc stage add -n data_ingestion \
+    -d src/data_ingestion.py \
+    -d data/raw_data.csv \
+    -o data/train.csv \
+    -o data/test.csv \
+    python src/data_ingestion.py
+```
+
+### Stage 2: Data Validation
+```bash
+dvc stage add -n data_validation \
+    -d src/data_validation.py \
+    -d data/train.csv \
+    -d data/test.csv \
+    -o artifacts/validation_report.json \
+    python src/data_validation.py
+```
+
+### Stage 3: Data Preprocessing
+```bash
+dvc stage add -n preprocessing \
+    -d src/preprocessing.py \
+    -d data/train.csv \
+    -d data/test.csv \
+    -o data/processed_train.csv \
+    -o data/processed_test.csv \
+    -o artifacts/preprocessing_report.json \
+    python src/preprocessing.py
+```
+
+### Stage 4: Model Training
+```bash
+dvc stage add -n model_training \
+    -d src/model_training.py \
+    -d data/processed_train.csv \
+    -o models/model.pkl \
+    -o artifacts/training_metrics.json \
+    -p model.learning_rate,model.n_estimators \
+    python src/model_training.py
+```
+
+### Stage 5: Model Evaluation
+```bash
+dvc stage add -n model_evaluation \
+    -d src/model_evaluation.py \
+    -d models/model.pkl \
+    -d data/processed_test.csv \
+    -M artifacts/metrics.json \
+    python src/model_evaluation.py
+```
+
+### Command Flags Explanation
+- `-n` : Name of the stage
+- `-d` : Dependencies (files that stage depends on)
+- `-o` : Outputs (files generated by the stage)
+- `-O` : Outputs (untracked, not cached by DVC)
+- `-p` : Parameters from params.yaml
+- `-M` : Metrics file
+- `-m` : Metrics (no cache)
+
+---
+
+## Run Pipeline
+```bash
+# Run the entire pipeline
+dvc repro
+
+# Run a specific stage
+dvc repro model_training
+
+# Force run (ignore cache)
+dvc repro --force
+
+# Run downstream stages
+dvc repro --downstream model_training
+```
+
+---
+
+## Visualize Pipeline
+```bash
+# Show pipeline DAG
+dvc dag
+
+# Show pipeline in ASCII format
+dvc dag --ascii
+
+# Show pipeline as HTML
+dvc dag --html > pipeline.html
+
+# Show pipeline in Mermaid format
+dvc dag --mermaid
+```
+
+---
+
+## Track Experiments
+```bash
+# Show metrics
+dvc metrics show
+
+# Compare metrics across experiments
+dvc metrics diff
+
+# Show parameters
+dvc params show
+
+# Compare parameters
+dvc params diff
+
+# Show both metrics and parameters
+dvc params diff --all
+```
+
+---
+
+## Commit Pipeline
+```bash
+# Add pipeline file and lock file
+git add dvc.yaml dvc.lock
+git commit -m "Add DVC pipeline"
+
+# Push data and models to remote
+dvc push
+
+# Push to git
+git push origin main
+```
+
+---
+
+## Pull Pipeline
+```bash
+# Clone repository
+git clone <repo-url>
+cd <repo-name>
+
+# Pull data from DVC remote
+dvc pull
+
+# Reproduce pipeline
+dvc repro
+```
+
+---
+
+## Pipeline Configuration Files
+
+### Create `dvc.yaml` File
+```yaml
+stages:
+  data_ingestion:
+    cmd: python src/data_ingestion.py
+    deps:
+      - src/data_ingestion.py
+      - data/raw_data.csv
+    outs:
+      - data/train.csv
+      - data/test.csv
+
+  data_validation:
+    cmd: python src/data_validation.py
+    deps:
+      - src/data_validation.py
+      - data/train.csv
+      - data/test.csv
+    outs:
+      - artifacts/validation_report.json
+
+  preprocessing:
+    cmd: python src/preprocessing.py
+    deps:
+      - src/preprocessing.py
+      - data/train.csv
+      - data/test.csv
+    outs:
+      - data/processed_train.csv
+      - data/processed_test.csv
+      - artifacts/preprocessing_report.json
+
+  model_training:
+    cmd: python src/model_training.py
+    deps:
+      - src/model_training.py
+      - data/processed_train.csv
+    params:
+      - model.learning_rate
+      - model.n_estimators
+      - model.max_depth
+    outs:
+      - models/model.pkl
+      - artifacts/training_metrics.json
+
+  model_evaluation:
+    cmd: python src/model_evaluation.py
+    deps:
+      - src/model_evaluation.py
+      - models/model.pkl
+      - data/processed_test.csv
+    metrics:
+      - artifacts/metrics.json:
+          cache: false
+```
+
+### Create `params.yaml` File
+```yaml
+model:
+  learning_rate: 0.01
+  n_estimators: 100
+  max_depth: 5
+  random_state: 42
+
+preprocessing:
+  test_size: 0.2
+  normalize: true
+
+training:
+  batch_size: 32
+  epochs: 100
+```
+
+### Create `.dvcignore` File
+```
+# Add patterns of files DVC should ignore
+*.pyc
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+```
+
+---
+
+## Useful Commands
+
+### Pipeline Management
+```bash
+# Check pipeline status
+dvc status
+
+# Show pipeline stages
+dvc stage list
+
+# Remove a stage
+dvc stage remove stage_name
+
+# Update dependencies
+dvc update
+
+# Freeze/unfreeze stages
+dvc freeze stage_name
+dvc unfreeze stage_name
+```
+
+### Experiment Tracking
+```bash
+# Run experiments
+dvc exp run
+
+# Show experiments
+dvc exp show
+
+# Compare experiments
+dvc exp diff
+
+# Apply an experiment
+dvc exp apply exp-name
+
+# Remove experiments
+dvc exp remove exp-name
+
+# List all experiments
+dvc exp list
+```
+
+### Data Management
+```bash
+# Add data to DVC
+dvc add data/file.csv
+
+# Push data to remote
+dvc push
+
+# Pull data from remote
+dvc pull
+
+# Fetch data (download without checkout)
+dvc fetch
+
+# Checkout data
+dvc checkout
+
+# Remove data from cache
+dvc gc
+
+# Show cache statistics
+dvc cache dir
+```
+
+### Remote Management
+```bash
+# List remotes
+dvc remote list
+
+# Modify remote
+dvc remote modify myremote url s3://new-bucket/path
+
+# Remove remote
+dvc remote remove myremote
+
+# Set default remote
+dvc remote default myremote
+```
+
+### Pipeline Execution
+```bash
+# Dry run (show what would be executed)
+dvc repro --dry
+
+# Run with specific target
+dvc repro model_evaluation
+
+# Run all downstream stages
+dvc repro --downstream preprocessing
+
+# Force run all stages
+dvc repro --force
+
+# Run single item
+dvc repro --single-item model_training
+```
+
+### Metrics and Plots
+```bash
+# Show metrics
+dvc metrics show
+
+# Show metrics from specific file
+dvc metrics show artifacts/metrics.json
+
+# Diff metrics
+dvc metrics diff
+
+# Generate plots
+dvc plots show
+
+# Compare plots
+dvc plots diff
+```
+
+### Version Control
+```bash
+# Check DVC version
+dvc version
+
+# Check for updates
+dvc version --check
+
+# Show config
+dvc config --list
+
+# Show local config
+dvc config --local --list
+```
+
+### Debugging
+```bash
+# Verbose output
+dvc repro -v
+
+# Very verbose output
+dvc repro -vv
+
+# Show DVC internal logs
+dvc doctor
+```
+
+---
+
+## Best Practices
+
+1. **Always commit `dvc.yaml` and `dvc.lock`** to Git
+2. **Never commit large data files** to Git, use DVC instead
+3. **Use meaningful stage names** for better pipeline visualization
+4. **Keep dependencies explicit** in your pipeline
+5. **Use parameters** for hyperparameters and configuration
+6. **Track metrics** for model performance monitoring
+7. **Use remote storage** for data backup and team collaboration
+8. **Version your data** along with your code
+9. **Run experiments** to compare different model configurations
+10. **Document your pipeline** in README.md
+
+---
+
+## Common Issues and Solutions
+
+### Issue: `dvc repro` doesn't run stages
+**Solution**: Check if stages are frozen with `dvc status`. Unfreeze with `dvc unfreeze stage_name`
+
+### Issue: Permission denied when pushing to remote
+**Solution**: Check remote credentials and access permissions
+
+### Issue: Pipeline runs slowly
+**Solution**: Use `dvc repro --single-item` to run only changed stages
+
+### Issue: Cache grows too large
+**Solution**: Run `dvc gc --workspace` to clean unused cache
+
+### Issue: Merge conflicts in `dvc.lock`
+**Solution**: Run `dvc repro` to regenerate the lock file
+
+---
+
+## Additional Resources
+
+- [DVC Documentation](https://dvc.org/doc)
+- [DVC Tutorial](https://dvc.org/doc/start)
+- [DVC Examples](https://github.com/iterative/example-repos)
+- [DVC Studio](https://studio.iterative.ai/)
+- [DVC Community](https://discord.com/invite/dvwXA2N)
+
+---
+
+## License
+
+This guide is provided as-is for educational purposes.
+
+---
+
+**Created by:** Your Name  
+**Last Updated:** 2025-01-23
