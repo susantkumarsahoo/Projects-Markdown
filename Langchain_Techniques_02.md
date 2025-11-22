@@ -2,136 +2,36 @@
 
 # 1. LLMs & Chat Models
 
-### ChatModels, LLMs, llms_chat_model, Model I/O, Prompt Templates, ChatPromptTemplate
-### PromptValue, Messages (BaseMessage, HumanMessage, AIMessage, SystemMessage)
-### Message Conversion utilities, Model Invocation (invoke, stream, batch), Structured Outputs
+#### ChatModels, LLMs, llms_chat_model, Model I/O, Prompt Templates, ChatPromptTemplate
+#### PromptValue, Messages (BaseMessage, HumanMessage, AIMessage, SystemMessage)
+#### Message Conversion utilities, Model Invocation (invoke, stream, batch), Structured Outputs
 
 # 2. Prompts & Templates, 
 ### PromptTemplate, ChatPromptTemplate, Few-shot prompts, Dynamic Prompts, Prompt Serialization
 ### Prompt Variables, Partial Prompting, Prompt Composition, System/Human/AI messages
 
 # 3. Output Parsers
-### StrOutputParser, JsonOutputParser, PydanticOutputParser, Structured Output Parser, RegexParser
-### Enum Output Parser, RetryWithErrorOutputParser, Output Fixing Parser
+#### StrOutputParser, JsonOutputParser, PydanticOutputParser, Structured Output Parser, RegexParser
+#### Enum Output Parser, RetryWithErrorOutputParser, Output Fixing Parser
 
 # 4. Memory (Conversation Memory)
-### BufferMemory, BufferWindowMemory, ConversationSummaryMemory, ConversationKGMemory
-### EntityMemory, VectorStoreRetrieverMemory, ChatMessageHistory, FileChatMessageHistory
-### Postgres/SQL Memory, ConversationTokenBufferMemory
+#### BufferMemory, BufferWindowMemory, ConversationSummaryMemory, ConversationKGMemory
+#### EntityMemory, VectorStoreRetrieverMemory, ChatMessageHistory, FileChatMessageHistory
+#### Postgres/SQL Memory, ConversationTokenBufferMemory
 
 # 5. Chains (Core Logic Units)
-
-
-LLMChain
-
-
-SequentialChain
-
-
-SimpleSequentialChain
-
-
-ConversationChain
-
-
-RetrievalQA
-
-
-Map-Reduce Chain
-
-
-Refine Chain
-
-
-Hypothetical Document Embeddings (HyDE)
-
-
-SummarizationChain
-
-
-RouterChain
-
-
-TransformChain
-
-
-LLMMathChain
-
-
-Tool-Using Chains
-
-
-
-6. Runnables (LangChain Expression Language)
-
-
-Runnable
-
-
-RunnableLambda
-
-
-RunnableSequence
-
-
-RunnableParallel
-
-
-RunnablePassthrough
-
-
-RunnableBranch
-
-
-RunnableMap
-
-
-RunnableConfigurable
-
-
-RunnableWithFallbacks
-
-
-RunnableWithRetry
-
-
-runnable.invoke/stream/batch/ainvoke
-
-
-
-7. Document Loading
-
-
-DocumentLoader
-
-
-TextLoader
-
-
-DirectoryLoader
-
-
-WebBaseLoader
-
-
-PyPDFLoader
-
-
-CSVLoader
-
-
-Unstructured loaders
-
-
-HTML/XML/JSON loaders
-
-
-NotebookLoader (.ipynb)
-
-
-YouTubeLoader
-
-
+#### LLMChain, SequentialChain, SimpleSequentialChain, ConversationChain, RetrievalQA
+#### Map-Reduce Chain, Refine Chain, Hypothetical Document Embeddings (HyDE)
+#### SummarizationChain, RouterChain, TransformChain, LLMMathChain, Tool-Using Chains
+
+# 6. Runnables (LangChain Expression Language)
+#### Runnable, RunnableLambda, RunnableSequence, RunnableParallel, RunnablePassthrough
+#### RunnableBranch, RunnableMap, RunnableConfigurable, RunnableWithFallbacks
+#### RunnableWithRetry, runnable.invoke/stream/batch/ainvoke
+
+# 7. Document Loading
+#### DocumentLoader, TextLoader, DirectoryLoader, WebBaseLoader, PyPDFLoader
+#### CSVLoader, Unstructured loaders, HTML/XML/JSON loaders, NotebookLoader (.ipynb), YouTubeLoader
 
 8. Text Splitters
 
