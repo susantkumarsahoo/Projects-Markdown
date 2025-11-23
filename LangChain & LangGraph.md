@@ -1,100 +1,51 @@
-# Projects-Markdown
-Markdown is a lightweight markup language used to add formatting elements (like bold text, headings, and lists) to plain text documents. It is widely used for creating documentation, such as project README files on GitHub.
+# 🦜 LangChain & LangGraph Reference Guide
 
-# 🦜 LangChain & LangGraph - Complete Reference Guide
-
-> **A comprehensive collection of techniques, components, and patterns for building AI applications**
+> A comprehensive collection of techniques, components, and patterns for building AI applications
 
 ---
 
 ## 📚 Table of Contents
 
-- [LangChain Techniques](#-langchain-techniques)
-  - [Core Concepts](#1-core-concepts)
-  - [Prompting Techniques](#2-prompting-techniques)
-  - [Memory Techniques](#3-memory-techniques)
-  - [Retrieval & RAG](#4-retrieval--rag-techniques)
-  - [Agents](#5-agents--techniques--types)
-  - [Tools & Integration](#6-tools--integration-techniques)
-  - [Output Processing](#7-output-processing-techniques)
-  - [Workflow & LCEL](#8-workflow--lcel-techniques)
-  - [Deployment & Ops](#9-deployment--ops-techniques)
-- [LangGraph Techniques](#-langgraph-techniques)
-  - [Core Graph Concepts](#1-core-graph-concepts)
-  - [Node Types](#2-node-types--technique-names)
-  - [State Management](#3-state-management-techniques)
-  - [Control Flow](#4-control-flow-techniques)
-  - [Agentic Workflows](#5-agentic-workflow-techniques)
-  - [RAG + Graph](#6-rag--graph-techniques)
-  - [Error Handling](#7-error-handling-techniques)
-  - [Evaluation & Monitoring](#8-evaluation--monitoring-techniques)
+- [LangChain Techniques](#langchain-techniques)
+- [LangGraph Techniques](#langgraph-techniques)
+- [Quick Reference](#quick-reference)
+- [Best Practices](#best-practices)
 
 ---
 
 ## 🦜 LangChain Techniques
 
-### 1. Core Concepts
+### Core Components
 
 | Component | Description |
 |-----------|-------------|
 | **LLMs** | Large Language Model interfaces |
 | **Chat Models** | Conversational AI model wrappers |
 | **Prompt Templates** | Reusable prompt structures |
-| **Prompt Serialization** | Save and load prompt configurations |
-| **Runnable Interfaces** | Unified execution interface |
 | **LCEL** | LangChain Expression Language for chaining |
 | **Chains** | Sequential, Router, Conditional workflows |
 | **Agents & Tools** | Autonomous decision-making components |
 
----
+### Prompting Techniques
 
-### 2. Prompting Techniques
-
-<table>
-<tr>
-<td width="50%">
-
-**Basic Prompting**
+**Basic**
 - Prompt Templates
 - Chat Prompt Templates
 - System/Role Prompting
 - Dynamic Prompting
 
-</td>
-<td width="50%">
-
-**Advanced Prompting**
+**Advanced**
 - Few-Shot Prompting
 - Zero-Shot Prompting
 - Retrieval-Augmented Prompting
 - Context Injection
 
-</td>
-</tr>
-<tr>
-<td>
-
 **Structured Output**
-- Structured Output Prompting
 - Function Calling
 - Tool Calling
+- Structured Output Prompting
 
-</td>
-<td>
-
-**Best Practices**
-- Clear instructions
-- Role definitions
-- Example demonstrations
-- Output formatting
-
-</td>
-</tr>
-</table>
-
----
-
-### 3. Memory Techniques
+### Memory Types
 
 | Memory Type | Use Case | Retention Strategy |
 |-------------|----------|-------------------|
@@ -103,107 +54,50 @@ Markdown is a lightweight markup language used to add formatting elements (like 
 | **ConversationTokenBufferMemory** | Token-limited storage | Token count |
 | **ConversationSummaryMemory** | Summarized history | Summarization |
 | **ConversationSummaryBufferMemory** | Hybrid approach | Summary + recent |
-| **KGMemory** | Knowledge graph storage | Entity relationships |
-| **EntityMemory** | Entity-focused tracking | Entity extraction |
 | **VectorStoreRetrieverMemory** | Semantic search | Vector similarity |
-| **Combined Memory** | Multiple strategies | Hybrid |
+| **EntityMemory** | Entity-focused tracking | Entity extraction |
 
-**Storage Backends:**
-- ChatMessageHistory Memory
-- PostgresChatMessageHistory
-- RedisChatMessageHistory
+**Storage Backends:** PostgreSQL, Redis, ChatMessageHistory
 
----
+### Retrieval & RAG
 
-### 4. Retrieval & RAG Techniques
+**Vector Stores:** Chroma, FAISS, Pinecone, Milvus, Weaviate
 
-<table>
-<tr>
-<td width="33%">
+**Embeddings:** OpenAI, HuggingFace, Cohere, Custom Models
 
-**Vector Stores**
-- Chroma
-- FAISS
-- Pinecone
-- Milvus
-- Weaviate
+**Retrievers:** MultiQuery, Contextual Compression, Parent Document, Ensemble, BM25
 
-</td>
-<td width="33%">
+**Advanced RAG Patterns**
 
-**Embeddings**
-- OpenAI
-- HuggingFace
-- Cohere
-- Custom Models
+| Pattern | Description |
+|---------|-------------|
+| **Self-RAG** | Self-correcting retrieval for improved accuracy |
+| **RAG Fusion** | Multiple query fusion for better coverage |
+| **Document Compression** | Context compression to reduce tokens |
+| **Re-ranking** | Result optimization for better relevance |
 
-</td>
-<td width="33%">
+**Document Processing:** PDF/CSV/HTML Loaders, Text Splitters (Recursive, Character, Semantic), Metadata Extraction
 
-**Retrievers**
-- MultiQuery
-- Contextual Compression
-- Parent Document
-- Ensemble
-- BM25
+### Agent Types
 
-</td>
-</tr>
-</table>
-
-**Advanced RAG Patterns:**
-
-| Pattern | Description | Benefit |
-|---------|-------------|---------|
-| **Self-RAG** | Self-correcting retrieval | Improved accuracy |
-| **RAG Fusion** | Multiple query fusion | Better coverage |
-| **Document Compression** | Context compression | Reduced tokens |
-| **Re-ranking** | Result optimization | Better relevance |
-
-**Document Processing:**
-- Document Loaders (PDF, CSV, HTML, etc.)
-- Text Splitters (Recursive, Character, Semantic)
-- Metadata Extraction
-
----
-
-### 5. Agents – Techniques & Types
-
-<table>
-<tr>
-<td width="50%">
-
-**Core Agent Types**
+**Core Agents**
 - ReAct Agent
 - Tool-Calling Agents
 - OpenAI Function Agent
 - Conversational Agent
 - Self-Ask Agent
-- Planner–Executor Agents
-
-</td>
-<td width="50%">
+- Planner-Executor Agents
 
 **Specialized Agents**
 - Zero-Shot Agent
 - Structured Output Agent
 - JSON Agent
-- Retrieval Agent
 - SQL Agent
 - VectorStore Agent
 
-</td>
-</tr>
-</table>
+**Execution Pattern:** Thought → Action → Observation → Thought → ... → Final Answer
 
-**Agent Execution Pattern:**
-```
-Thought → Action → Observation → Thought → ... → Final Answer
-```
-
----
-
-### 6. Tools & Integration Techniques
+### Tools & Integration
 
 | Category | Tools | Purpose |
 |----------|-------|---------|
@@ -212,149 +106,60 @@ Thought → Action → Observation → Thought → ... → Final Answer
 | **Data** | SQL Tools, DataFrame Tools | Data manipulation |
 | **Web** | Browser Tools, HTTP Tools | Web interaction |
 | **File** | File Tools, Document Tools | File operations |
-| **Custom** | Function-based Tools | Domain-specific tasks |
 
-**Tool Creation Methods:**
-- `@tool` decorator
-- `StructuredTool` class
-- Custom Toolkit Building
-- Function wrapping
+**Tool Creation:** `@tool` decorator, `StructuredTool` class, Custom Toolkit Building
 
----
+### Output Processing
 
-### 7. Output Processing Techniques
+**Parsers:** Output Parsers, Structured Output Parser, JSON Output Parser, PydanticOutputParser, RetryOutputParser
 
-<table>
-<tr>
-<td width="50%">
+**Validation:** Schema Validation, Guardrails, Type Checking, Error Recovery
 
-**Parsers**
-- Output Parsers
-- Structured Output Parser
-- JSON Output Parser
-- PydanticOutputParser
-- RetryOutputParser
+### Workflow & LCEL
 
-</td>
-<td width="50%">
+**Runnable Components**
 
-**Validation**
-- Schema Validation
-- Guardrails
-- Type Checking
-- Fixing Parsing Errors
-- Error Recovery
-
-</td>
-</tr>
-</table>
-
----
-
-### 8. Workflow & LCEL Techniques
-
-**Runnable Components:**
-
-| Component | Purpose | Example Use |
-|-----------|---------|-------------|
+| Component | Purpose | Pattern |
+|-----------|---------|---------|
 | **RunnableSequence** | Linear execution | A → B → C |
 | **RunnableParallel** | Parallel execution | A ∥ B ∥ C |
 | **RunnableBranch** | Conditional routing | If-then-else |
 | **Retry & Fallback** | Error handling | Resilience |
 
-**Execution Modes:**
-- Streaming (real-time output)
-- Batch Processing (bulk operations)
-- Async Processing (non-blocking)
+**Execution Modes:** Streaming, Batch Processing, Async Processing
 
-**Observability:**
-- Tracing & Instrumentation
-- Performance Monitoring
-- Debug Logging
+**Observability:** Tracing & Instrumentation, Performance Monitoring, Debug Logging
 
----
+### Deployment & Operations
 
-### 9. Deployment & Ops Techniques
+**Deployment:** LangServe (API serving), Endpoint Hosting, Container Deployment
 
-<table>
-<tr>
-<td width="50%">
-
-**Deployment**
-- LangServe (API serving)
-- Endpoint Hosting
-- Versioned Pipelines
-- Container Deployment
-
-</td>
-<td width="50%">
-
-**Operations**
-- Rate Limiting
-- Caching (Redis, Memory)
-- Monitoring (LangSmith)
-- Cost Tracking
-
-</td>
-</tr>
-</table>
-
-**Production Considerations:**
-- Async processing for scale
-- Response caching
-- Error tracking
-- Usage analytics
+**Operations:** Rate Limiting, Caching (Redis, Memory), Monitoring (LangSmith), Cost Tracking
 
 ---
 
 ## 🕸️ LangGraph Techniques
 
-### 1. Core Graph Concepts
+### Core Graph Concepts
 
-| Concept | Description | Purpose |
-|---------|-------------|---------|
-| **State Graph** | Directed graph with state | Workflow orchestration |
-| **Node** | Execution unit | Processing step |
-| **Edge** | Connection between nodes | Flow control |
-| **State Management** | Shared data across nodes | Context preservation |
-| **Memory within Graph** | Graph-level memory | Persistent context |
-| **Checkpointing** | Save graph state | Recovery & replay |
-| **Persistence** | Long-term storage | Session continuity |
-| **Branching** | Multiple paths | Conditional logic |
-| **Loops** | Iterative execution | Repeated operations |
-| **Subgraphs** | Nested graphs | Modular design |
+| Concept | Description |
+|---------|-------------|
+| **State Graph** | Directed graph with state for workflow orchestration |
+| **Node** | Execution unit (processing step) |
+| **Edge** | Connection between nodes for flow control |
+| **State Management** | Shared data across nodes |
+| **Checkpointing** | Save graph state for recovery & replay |
+| **Branching** | Multiple paths for conditional logic |
+| **Loops** | Iterative execution for repeated operations |
+| **Subgraphs** | Nested graphs for modular design |
 
----
+### Node Types
 
-### 2. Node Types / Technique Names
+**Execution Nodes:** Tool Node, LLM Node, Transform Node, Message Node
 
-<table>
-<tr>
-<td width="50%">
+**Control Nodes:** Router Node, Condition Node, Human-in-the-Loop Node, Retry Node, Error Node
 
-**Execution Nodes**
-- Tool Node
-- LLM Node
-- Transform Node
-- Message Node
-
-</td>
-<td width="50%">
-
-**Control Nodes**
-- Router Node
-- Condition Node
-- Human-in-the-loop Node
-- Retry Node
-- Error Node
-
-</td>
-</tr>
-</table>
-
----
-
-### 3. State Management Techniques
+### State Management
 
 | Technique | Behavior | Use Case |
 |-----------|----------|----------|
@@ -364,153 +169,71 @@ Thought → Action → Observation → Thought → ... → Final Answer
 | **Additive State** | Append-only updates | History tracking |
 | **Snapshot State** | Point-in-time capture | Versioning |
 | **Checkpoint Restore** | State recovery | Error recovery |
-| **State Revalidation** | Consistency checks | Data integrity |
-| **Strict State Schema** | Enforced validation | Production safety |
+
+### Control Flow
+
+**Routing Patterns:** If-Else Routing, Dynamic Routing, Multi-path Execution, Conditional Branching
+
+**Resilience Patterns:** Loops (While/For), Retry Logic, Fallback Logic, Timeout Control, Guardrail Validation
+
+**Flow Pattern:** Start → Condition → [Path A | Path B] → Merge → End
+
+### Agentic Workflows
+
+| Pattern | Best For |
+|---------|----------|
+| **Multi-Agent Orchestration** | Complex tasks requiring coordination |
+| **Planner-Executor Graph** | Strategic workflows with planning phase |
+| **Tool-Calling Agents** | Action-oriented tasks |
+| **Routing Agents** | Specialized routing between agents |
+| **Supervisor-Worker Graphs** | Hierarchical team coordination |
+| **Task Decomposition** | Breaking down large projects |
+
+### RAG + Graph
+
+**Retrieval Patterns:** Modular RAG Graph, Iterative Retrieval, Multi-Retriever Graph, Self-RAG Graph
+
+**Validation Nodes:** Reality Check, Verification, Context Revalidation, Evidence Collection
+
+**Advanced Flow:** Query → Retrieve → Validate → Re-retrieve (if needed) → Generate → Verify
+
+### Error Handling
+
+| Technique | Recovery Strategy |
+|-----------|-------------------|
+| **Error Nodes** | Catch & process errors |
+| **Exception Routing** | Route errors to handlers |
+| **Fallback Node** | Backup strategy |
+| **Tool Failure Recovery** | Retry or use alternate tool |
+| **Response Revalidation** | Quality assurance checks |
+| **Automatic Node Retry** | Handle transient failures |
+
+### Evaluation & Monitoring
+
+**Debugging:** Checkpoint Inspection, State Diffing, Execution Replay, Step-by-step Analysis
+
+**Observability:** Graph Tracing, Performance Metrics, LangSmith Integration, Execution Logs
+
+**Key Metrics:** Node execution time, State transitions, Error rates, Token usage, Success rates
 
 ---
 
-### 4. Control Flow Techniques
+## 🎯 Quick Reference
 
-<table>
-<tr>
-<td width="50%">
-
-**Routing Patterns**
-- If–Else Routing
-- Dynamic Routing
-- Multi-path Execution
-- Conditional Branching
-
-</td>
-<td width="50%">
-
-**Resilience Patterns**
-- Loops (While/For patterns)
-- Retry Logic
-- Fallback Logic
-- Timeout Control
-- Guardrail Validation
-
-</td>
-</tr>
-</table>
-
-**Flow Visualization:**
-```
-Start → Condition → [Path A | Path B] → Merge → End
-```
-
----
-
-### 5. Agentic Workflow Techniques
-
-| Pattern | Structure | Best For |
-|---------|-----------|----------|
-| **Multi-Agent Orchestration** | Multiple agents coordination | Complex tasks |
-| **Planner–Executor Graph** | Plan then execute | Strategic workflows |
-| **Tool-Calling Agents** | Agent with tools | Action-oriented tasks |
-| **Routing Agents** | Dynamic agent selection | Specialized routing |
-| **Supervisor–Worker Graphs** | Hierarchical control | Team coordination |
-| **Task Decomposition** | Break down tasks | Large projects |
-| **Programmatic Agent Control** | Code-driven agents | Custom logic |
-
----
-
-### 6. RAG + Graph Techniques
-
-<table>
-<tr>
-<td width="50%">
-
-**Retrieval Patterns**
-- Modular RAG Graph
-- Iterative Retrieval
-- Multi-Retriever Graph
-- Self-RAG Graph
-
-</td>
-<td width="50%">
-
-**Validation Nodes**
-- Reality Check Nodes
-- Verification Nodes
-- Context Revalidator Node
-- Evidence Collection Node
-
-</td>
-</tr>
-</table>
-
-**Advanced RAG Flow:**
-```
-Query → Retrieve → Validate → Re-retrieve (if needed) → Generate → Verify
-```
-
----
-
-### 7. Error Handling Techniques
-
-| Technique | Implementation | Recovery Strategy |
-|-----------|----------------|-------------------|
-| **Error Nodes** | Dedicated error handling | Catch & process |
-| **Exception Routing** | Route errors to handlers | Conditional recovery |
-| **Fallback Node** | Alternative path | Backup strategy |
-| **Tool Failure Recovery** | Tool-specific recovery | Retry or alternate |
-| **Response Revalidation** | Validate outputs | Quality assurance |
-| **Automatic Node Retry** | Built-in retry logic | Transient failures |
-
----
-
-### 8. Evaluation & Monitoring Techniques
-
-<table>
-<tr>
-<td width="50%">
-
-**Debugging**
-- Checkpoint Inspection
-- State Diffing
-- Execution Replay
-- Step-by-step Analysis
-
-</td>
-<td width="50%">
-
-**Observability**
-- Graph Tracing
-- Performance Metrics
-- LangSmith Integration
-- Execution Logs
-
-</td>
-</tr>
-</table>
-
-**Monitoring Metrics:**
-- Node execution time
-- State transitions
-- Error rates
-- Token usage
-- Success rates
-
----
-
-## 🎯 Quick Reference: When to Use What
-
-| Use Case | LangChain Component | LangGraph Component |
-|----------|-------------------|-------------------|
+| Use Case | LangChain | LangGraph |
+|----------|-----------|-----------|
 | Simple Q&A | Chain + LLM | Not needed |
 | Multi-step reasoning | Sequential Chain | State Graph |
 | Tool usage | Agent + Tools | Tool Node + Router |
 | Conversational | Memory + Chain | State Graph + Memory |
 | Complex workflows | LCEL + Chains | Multi-node Graph |
-| Human-in-loop | Not native | HITL Node |
+| Human-in-the-loop | Not native | HITL Node |
 | Error recovery | Retry/Fallback | Error Nodes |
 | RAG pipeline | RAG Chain | RAG Graph |
 
 ---
 
-## 📖 Best Practices Summary
+## 📖 Best Practices
 
 ### LangChain
 ✅ Use LCEL for composable chains  
@@ -533,11 +256,7 @@ Query → Retrieve → Validate → Re-retrieve (if needed) → Generate → Ver
 - **LangChain Docs:** https://python.langchain.com/
 - **LangGraph Docs:** https://langchain-ai.github.io/langgraph/
 - **LangSmith:** https://smith.langchain.com/
-- **Community:** Discord & GitHub Discussions
 
 ---
 
-*Last Updated: November 2025 | Version 1.0*
-
-
-
+*Last Updated: November 2025*
