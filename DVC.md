@@ -15,6 +15,7 @@
 - [Useful Commands](#useful-commands)
 
 ---
+```bash
 ### --- Git setup ---
 git init                  # initialize git repo
 git add .                 # stage files
