@@ -15,6 +15,37 @@
 - [Useful Commands](#useful-commands)
 
 ---
+### --- Git setup ---
+git init                  # initialize git repo
+git add .                 # stage files
+git commit -m "init repo" # first commit
+
+### --- DVC setup ---
+dvc init                  # initialize dvc in repo
+git add .dvc .gitignore
+git commit -m "init dvc"
+
+### --- Track data with DVC ---
+dvc add data/raw.csv      # track dataset
+git add data/raw.csv.dvc
+git commit -m "track raw data"
+
+### --- Remote storage ---
+dvc remote add -d storage s3://bucket/path   # example remote
+git commit .dvc/config -m "add dvc remote"
+
+### --- Push data to remote ---
+dvc push                  # upload tracked data
+git push origin main      # push code + metadata
+
+### --- Reproduce pipeline ---
+dvc repro                 # run pipeline stages
+dvc status                # check pipeline status
+
+### --- Share / pull data ---
+git clone <repo-url>      # clone repo
+dvc pull                  # fetch data from remote
+
 
 ## Installation
 ```bash
