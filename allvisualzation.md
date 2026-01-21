@@ -10,6 +10,8 @@ This project serves as:
 ---
 
 ## 🚀 Features
+## Donut Chart
+<img width="239" height="177" alt="image" src="https://github.com/user-attachments/assets/70fb5bf9-c7f7-45ec-8781-d842097bf795" />
 
 ### 2D Visualizations (Chart.js)
 - Pie Chart
