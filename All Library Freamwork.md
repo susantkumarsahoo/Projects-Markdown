@@ -47,6 +47,8 @@
 | OCR | PaddleOCR | Deep learning OCR system |
 | OCR | Tesseract OCR | Traditional OCR engine |
 | OCR | EasyOCR | Lightweight deep learning OCR |
+| Speech | SpeechRecognition | computers turn spoken words into written text |
+| Video → Text | MoviePy or FFmpeg | MoviePy or FFmpeg → Extract audio track from video |
 | Document AI | Unstructured | Multi-format document ingestion |
 | Document AI | Docling | AI document parsing framework |
 | Word Processing | python-docx | Word document handling |
