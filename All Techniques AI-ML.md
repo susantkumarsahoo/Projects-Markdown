@@ -155,3 +155,7 @@ SelfTrainingClassifier
 Neural Network (basic)
 MLP Classifier
 MLP Regressor
+
+file:///C:/Users/TPWODL/Downloads/sklearn_horizontal_overview.html
+
+
