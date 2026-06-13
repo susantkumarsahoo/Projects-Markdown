@@ -1,161 +1,44 @@
-Scikit-learn algorithms and techniques organized by category in a horizontal layout
-Supervised — Classification
-Linear
-Logistic Regression
-Ridge Classifier
-SGD Classifier
-Perceptron
-Passive Aggressive
-LDA
-QDA
-SVM
-SVC
-Linear SVC
-NuSVC
-Tree-based
-Decision Tree
-Random Forest
-Extra Trees
-Gradient Boosting
-HistGradientBoosting
-AdaBoost
-Bagging
-Other
-KNN
-GaussianNB
-MultinomialNB
-BernoulliNB
-ComplementNB
-CategoricalNB
-MLP Classifier
-Dummy Classifier
-Supervised — Regression
-Linear
-Linear Regression
-Ridge
-Lasso
-ElasticNet
-Lars
-LassoLars
-BayesianRidge
-ARD Regression
-SGD Regressor
-OMP
-SVM
-SVR
-Linear SVR
-NuSVR
-Tree-based
-Decision Tree
-Random Forest
-Extra Trees
-Gradient Boosting
-HistGradientBoosting
-AdaBoost
-Bagging
-Robust / Other
-Huber
-RANSAC
-Theil-Sen
-KNN Regressor
-MLP Regressor
-Dummy Regressor
-TransformedTarget
-Unsupervised — Clustering
-Centroid-based
-K-Means
-Mini-Batch K-Means
-Mean Shift
-Affinity Propagation
-Birch
-Density-based
-DBSCAN
-HDBSCAN
-OPTICS
-Hierarchical / Graph
-Agglomerative
-Spectral Clustering
-Probabilistic
-Gaussian Mixture
-Bayesian GMM
+Data Collection → Data Cleaning → Preprocessing → Feature Engineering → Feature Selection → Train-Test Split → Model Training (Supervised / Unsupervised / Semi-Supervised) → Hyperparameter Tuning → Model Evaluation → Ensemble Learning → Pipeline Creation → Model Deployment → Model Monitoring
 
-----------------------
-Unsupervised — Dimensionality Reduction
-Linear
-PCA
-Incremental PCA
-Sparse PCA
-TruncatedSVD
-Factor Analysis
-FastICA
-NMF
-Non-linear / Manifold
-Kernel PCA
-t-SNE
-Isomap
-LLE
-Spectral Embedding
-MDS
-Anomaly Detection  ·  Preprocessing  ·  Feature Selection  ·  Meta-Estimators
-Anomaly Detection
-Isolation Forest
-Local Outlier Factor
-One-Class SVM
-Elliptic Envelope
-Scaling
-StandardScaler
-MinMaxScaler
-RobustScaler
-MaxAbsScaler
-Normalizer
-PowerTransformer
-QuantileTransformer
-Encoding / Imputing
-OneHotEncoder
-OrdinalEncoder
-LabelEncoder
-TargetEncoder
-SimpleImputer
-KNNImputer
-IterativeImputer
-PolynomialFeatures
-KBinsDiscretizer
-Feature Selection
-VarianceThreshold
-SelectKBest
-SelectPercentile
-RFE
-RFECV
-SelectFromModel
-SequentialFeatureSelector
-Meta-Estimators
-Pipeline
-ColumnTransformer
-FeatureUnion
-VotingClassifier
-StackingClassifier
-BaggingClassifier
-CalibratedClassifierCV
-MultiOutputClassifier
-ClassifierChain
-Model Selection
-GridSearchCV
-RandomizedSearchCV
-HalvingGridSearchCV
-Cross-Validation
-KFold
-StratifiedKFold
-LeaveOneOut
-Learning Curve
-Semi-supervised  ·  Neural Networks
-Semi-supervised
-LabelPropagation
-LabelSpreading
-SelfTrainingClassifier
-Neural Network (basic)
-MLP Classifier
-MLP Regressor
+---------
 
-file:///C:/Users/TPWODL/Downloads/sklearn_horizontal_overview.html
+
+🔵 Supervised Learning
+
+Classification: Logistic Regression | Linear Discriminant Analysis (LDA) | Quadratic Discriminant Analysis (QDA) | Support Vector Classifier (SVC) | Linear SVC | K-Nearest Neighbors (KNN) | Decision Tree Classifier | Random Forest Classifier | Extra Trees Classifier | Gradient Boosting Classifier | HistGradientBoosting Classifier | AdaBoost Classifier | Bagging Classifier | GaussianNB | MultinomialNB | BernoulliNB | ComplementNB | CategoricalNB | SGDClassifier | Perceptron | Ridge Classifier | Passive Aggressive Classifier | Dummy Classifier
+
+Regression: Linear Regression | Ridge Regression | Lasso Regression | ElasticNet | BayesianRidge | ARD Regression | SGD Regressor | SVR | Linear SVR | KNeighbors Regressor | Decision Tree Regressor | Random Forest Regressor | Extra Trees Regressor | Gradient Boosting Regressor | HistGradientBoosting Regressor | AdaBoost Regressor | Bagging Regressor | Huber Regressor | Theil-Sen Regressor | RANSAC Regressor | Lars | LassoLars | OrthogonalMatchingPursuit | Dummy Regressor
+
+🟢 Unsupervised Learning
+
+Clustering: K-Means | Mini-Batch K-Means | Affinity Propagation | Mean Shift | DBSCAN | HDBSCAN | OPTICS | Spectral Clustering | Agglomerative Clustering (Hierarchical) | Birch | Gaussian Mixture Model (GMM) | Bayesian Gaussian Mixture
+
+Dimensionality Reduction: PCA | Incremental PCA | Kernel PCA | Sparse PCA | Mini-Batch Sparse PCA | TruncatedSVD | Factor Analysis | FastICA | NMF | t-SNE | UMAP | Isomap | LLE | Spectral Embedding | MDS
+
+Anomaly / Outlier Detection: Isolation Forest | Local Outlier Factor (LOF) | One-Class SVM | Elliptic Envelope | Robust Covariance
+
+🟡 Model Selection & Evaluation
+
+Cross-Validation (KFold, StratifiedKFold, LeaveOneOut, etc.) | GridSearchCV | RandomizedSearchCV | HalvingGridSearchCV | HalvingRandomSearchCV | Train-Test Split | Learning Curve | Validation Curve
+
+🟠 Preprocessing & Feature Engineering
+
+StandardScaler | MinMaxScaler | MaxAbsScaler | RobustScaler | Normalizer | Binarizer | LabelEncoder | OrdinalEncoder | OneHotEncoder | TargetEncoder | PolynomialFeatures | SplineTransformer | PowerTransformer (Yeo-Johnson, Box-Cox) | QuantileTransformer | KBinsDiscretizer | SimpleImputer | KNNImputer | IterativeImputer | MissingIndicator
+
+🔴 Feature Selection
+
+VarianceThreshold | SelectKBest | SelectPercentile | SelectFpr | SelectFdr | SelectFwe | RFE | RFECV | SelectFromModel | SequentialFeatureSelector
+
+🟣 Pipelines & Meta-Estimators
+
+Pipeline | FeatureUnion | ColumnTransformer | VotingClassifier | VotingRegressor | StackingClassifier | StackingRegressor | MultiOutputClassifier | MultiOutputRegressor | ClassifierChain | RegressorChain | CalibratedClassifierCV | TransformedTargetRegressor
+
+⚪ Semi-Supervised Learning
+
+LabelPropagation | LabelSpreading | SelfTrainingClassifier
+
+🟤 Neural Network (Basic)
+
+MLPClassifier | MLPRegressor
 
 
