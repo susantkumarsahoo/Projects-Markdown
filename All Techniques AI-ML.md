@@ -78,6 +78,8 @@ Spectral Clustering
 Probabilistic
 Gaussian Mixture
 Bayesian GMM
+
+----------------------
 Unsupervised — Dimensionality Reduction
 Linear
 PCA
