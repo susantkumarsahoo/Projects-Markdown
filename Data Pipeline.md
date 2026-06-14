@@ -386,5 +386,203 @@ MIT
 
 
 
+┌─────────────────────────────────────────────────────────────────────────┐
+│              ADVANCED TIME SERIES DATA PIPELINE                         │
+└─────────────────────────────────────────────────────────────────────────┘
+
+═══ INGESTION LAYER ══════════════════════════════════════════════════════
+
+  [L1]  Data Sources
+        │  IoT sensors · financial ticks · application metrics
+        │  log streams · weather feeds · clickstreams
+        ↓
+  [L2]  Transport & Message Broker
+        │  Kafka / Redpanda / Kinesis / Pub-Sub
+        │  Topics partitioned by entity_id for ordering guarantees
+        ↓
+  [L3]  Schema Validation & Ingestion Gateway
+        │  Schema registry (Avro / Protobuf)
+        │  Timestamp extraction · null checks · type coercion
+        │  Dead-letter queue for malformed events
+
+═══ STREAM PROCESSING LAYER ══════════════════════════════════════════════
+
+        ↓
+  [L4]  Event Time Alignment & Watermarking
+        │  Extract event_time vs. processing_time
+        │  Set watermark tolerance for late arrivals
+        │  Reorder out-of-sequence events within watermark window
+        ↓
+  [L5]  Real-Time Cleaning
+        │  Spike / outlier detection (z-score, IQR, isolation forest)
+        │  Missing value imputation (forward-fill, linear interpolation)
+        │  Unit normalisation · timezone standardisation
+        ↓
+  [L6]  Windowing & Aggregation
+        │  Tumbling windows  (non-overlapping fixed intervals)
+        │  Sliding windows   (overlapping, e.g. 5 min every 1 min)
+        │  Session windows   (gap-based, activity-driven)
+        │  Per-window: min, max, mean, stddev, percentiles, count
+        ↓
+  [L7]  Stream Enrichment & Joins
+        │  Enrich with entity metadata (device info, geo, config)
+        │  Stream-to-stream joins with bounded time tolerance
+        │  Broadcast joins for slowly-changing reference tables
+
+═══ STORAGE LAYER ════════════════════════════════════════════════════════
+
+        ↓
+  [L8]  Raw Time Series Store  (immutable, append-only)
+        │  Time series DB: InfluxDB · TimescaleDB · QuestDB · Druid
+        │  Retention policy: hot (SSD) → warm (HDD) → cold (object store)
+        │  Partitioned by time bucket + entity_id
+        ↓
+  [L9]  Processed & Aggregated Store
+        │  Pre-aggregated rollups (1m, 5m, 1h, 1d)
+        │  Materialised views for common query patterns
+        │  Columnar format (Parquet / ORC) on object storage for analytics
+        ↓
+  [L10] Feature Store
+        │  Online store  (Redis / DynamoDB) — low-latency serving
+        │  Offline store (S3 / GCS + Delta Lake) — training datasets
+        │  Point-in-time correct snapshots to prevent data leakage
+
+═══ BATCH PROCESSING LAYER ═══════════════════════════════════════════════
+
+        ↓
+  [L11] Historical Backfill & Reprocessing
+        │  Replay raw events through updated logic
+        │  Backfill feature store after schema / algorithm changes
+        │  Spark / Dask / Ray for distributed processing
+        ↓
+  [L12] Data Quality & Completeness Checks
+        │  Gap detection: expected vs. actual event counts per interval
+        │  Flatline detection: series stuck at constant value
+        │  Cross-series consistency checks (e.g. power = V × I)
+        ↓
+  [L13] Segmentation & Labelling
+        │  Label known anomaly windows from incident reports
+        │  Segment series by regime (weekday/weekend, on-peak/off-peak)
+        │  Attach ground-truth forecast targets for supervised training
+
+═══ FEATURE ENGINEERING LAYER ════════════════════════════════════════════
+
+        ↓
+  [L14] Lag & Difference Features
+        │  Lag-1, lag-k, lag-seasonal (e.g. lag-168 for weekly)
+        │  First-order differences (velocity)
+        │  Second-order differences (acceleration)
+        ↓
+  [L15] Rolling Statistical Features
+        │  Rolling mean, std, min, max, median
+        │  Exponentially weighted moving average (EWMA)
+        │  Rolling autocorrelation · rolling quantiles
+        ↓
+  [L16] Temporal & Calendar Features
+        │  Hour of day · day of week · month · quarter
+        │  Is-holiday · days-since-last-event
+        │  Cyclical encoding: sin/cos transforms for periodic features
+        ↓
+  [L17] Frequency Domain Features
+        │  FFT — dominant frequencies and amplitudes
+        │  Wavelet decomposition (multi-resolution analysis)
+        │  STL decomposition: trend + seasonality + residual components
+
+═══ MODELING LAYER ═══════════════════════════════════════════════════════
+
+        ↓
+  [L18] Model Selection & Experiment Tracking
+        │  Classical:  ARIMA · SARIMA · ETS · Prophet · Theta
+        │  ML:         XGBoost · LightGBM · Random Forest on lag features
+        │  Deep:       LSTM · TCN · N-BEATS · PatchTST · TimesNet
+        │  Experiment tracking: MLflow · Weights & Biases
+        ↓
+  [L19] Cross-Validation & Backtesting
+        │  Walk-forward validation (expanding or rolling window)
+        │  Embargo gap between train and validation to prevent leakage
+        │  Metrics: MAE, RMSE, MAPE, SMAPE, wQL (weighted quantile loss)
+        ↓
+  [L20] Probabilistic Forecasting
+        │  Quantile regression · conformal prediction intervals
+        │  Monte Carlo dropout · deep ensembles
+        │  Calibration: reliability diagrams, coverage checks
+        ↓
+  [L21] Anomaly Detection
+        │  Statistical: STL residuals, CUSUM, control charts
+        │  ML: Isolation Forest, One-Class SVM, Autoencoder residuals
+        │  Deep: LSTM reconstruction error, TranAD, USAD
+        │  Alert deduplication and severity scoring
+        ↓
+  [L22] Model Registry & Versioning
+        │  Register champion model per entity/series group
+        │  Stage: Staging → Shadow → Production → Archived
+        │  Artifact storage: weights, hyperparameters, feature schema
+
+═══ SERVING LAYER ════════════════════════════════════════════════════════
+
+        ↓
+  [L23] Batch Inference Pipeline
+        │  Scheduled forecasts (hourly, daily) for all series
+        │  Writes predictions to forecast store with horizon metadata
+        │  Supports multi-step, multi-horizon, multi-series outputs
+        ↓
+  [L24] Real-Time Prediction API
+        │  REST / gRPC endpoint: POST /forecast
+        │  Sub-100ms p99 latency via online feature store + cached model
+        │  Handles single series and batch-of-series requests
+        ↓
+  [L25] Alerting & Notification Engine
+        │  Threshold alerts (static and dynamic/adaptive)
+        │  Anomaly alerts from L21 with cooldown and dedup
+        │  Routing: PagerDuty · Slack · email · webhook
+        ↓
+  [L26] Visualisation & Dashboard Layer
+        │  Grafana · Superset · custom React dashboards
+        │  Forecast overlays with confidence intervals
+        │  Anomaly annotations on time series charts
+
+═══ OBSERVABILITY LAYER ══════════════════════════════════════════════════
+
+        ↓
+  [L27] Data Quality Monitoring
+        │  Schema drift detection (new/missing fields)
+        │  Distribution shift: PSI, KL divergence on value distributions
+        │  Freshness SLA tracking: alert if series goes stale
+        ↓
+  [L28] Pipeline Health & SLOs
+        │  End-to-end latency tracking (event_time → prediction_available)
+        │  Throughput, error rate, consumer lag per Kafka topic
+        │  SLO dashboards with error budget burn rates
+        ↓
+  [L29] Model Performance Monitoring
+        │  Compare live predictions to actuals as ground truth arrives
+        │  Sliding-window metrics: rolling MAE, rolling coverage
+        │  Trigger retraining when metric degrades past threshold
+
+═══ CONTINUOUS IMPROVEMENT LAYER ═════════════════════════════════════════
+
+        ↓
+  [L30] Retraining Trigger System
+        │  Scheduled retraining (daily, weekly)
+        │  Performance-triggered retraining from L29 signals
+        │  Data-volume-triggered retraining when new labels accumulate
+        ↓
+  [L31] Automated Hyperparameter Optimisation
+        │  Optuna · Ray Tune · Bayesian optimisation
+        │  Search over model architecture, window sizes, feature sets
+        │  Budget-aware: early stopping, successive halving
+        ↓
+  [L32] Champion / Challenger A/B Testing
+        │  Shadow mode: new model runs alongside champion silently
+        │  Canary rollout: route N% of traffic to challenger
+        │  Promote challenger when statistically better over eval window
+        ↓
+  [L33] Feedback & Label Collection
+        │  Operator-confirmed anomaly labels from alert responses
+        │  Forecast correction annotations from domain experts
+        │  Auto-label from delayed ground truth (actuals feed)
+        │
+        └──────────────────────────────────────────► back to L18 (retrain)
+
 
 
